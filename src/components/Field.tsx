@@ -46,6 +46,9 @@ export const Field: FC = () => {
         if(intermediateResult !== ""){
             const resultNew: string | number = arithmeticAction(sign, result, intermediateResult);
             setResult(resultNew === "" ? intermediateResult : resultNew.toString());
+            if (result === resultNew.toString()) {
+                setOutputNumber(resultNew.toString());
+            }
         }
 
         setIntermediateResult(""); 
@@ -67,6 +70,9 @@ export const Field: FC = () => {
                 case "=":
                     const resultNew: number = arithmeticAction(sign, result, intermediateResult) as number;
                     setResult(resultNew.toString());
+                    if (result === resultNew.toString()) {
+                        setOutputNumber(resultNew.toString());
+                    }
                     setIntermediateResult("");
                     setSign("");
                     break;                    
