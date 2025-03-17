@@ -2,7 +2,7 @@ import { FC } from "react";
 import React from "react";
 
 type Props = {
-    result: number
+    result: string;
 }
 
 export const Result: FC<Props> = ({result}) =>{

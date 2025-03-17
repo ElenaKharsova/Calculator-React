@@ -8,6 +8,6 @@ type Props = {
 
 export const Button: FC<Props> = ({value, handleClick}) => {
     return(
-        <button className = {`calculator-button-${value}`} onClick = {handleClick}>{value}</button>
+        <button className = {`calculator-button calculator-button-${value}`} onClick = {handleClick}>{value}</button>
     )
 }
