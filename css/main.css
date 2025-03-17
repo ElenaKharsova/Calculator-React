@@ -1,0 +1,66 @@
+:root{
+    --button-size-width: 45px;
+    --button-size-height: 45px;
+}
+
+.app-wrap {
+    margin: 0 auto;
+    width: 98%;
+    max-width: 1140px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px
+}
+
+.field {
+    border: solid 2px rgb(87, 87, 218);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.result-field {
+    text-align: right;
+    font-size: 2rem;
+    width: 210px;
+    margin-bottom: 10px;
+}
+
+.buttons-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: calc(4 * var(--button-size-height) + 30px);
+}
+
+.arithmetic-buttons-wrap, 
+.function-buttons-wrap,
+.number-buttons-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.function-buttons-wrap{
+    justify-content: flex-end;
+}
+
+.arithmetic-buttons-wrap{
+    justify-content: flex-start;
+}
+
+.calculator-button {
+    font-size: 1.8em;
+    width: var(--button-size-width);
+    height: var(--button-size-height);
+    border: solid 2px rgb(92, 92, 158);
+    border-radius: 10px;
+}
+
+.calculator-button:hover {
+    background: rgb(92, 92, 158);
+}
+
+/*# sourceMappingURL=main.css.map*/
