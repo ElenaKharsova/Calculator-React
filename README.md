@@ -3,4 +3,5 @@
 # The calculator app
 
 Result of work you can see in https://elenakharsova.github.io/Calculator-React/
-![image](https://github.com/user-attachments/assets/5a7dd527-9222-4b29-aca0-3f13cd422531)
+
+<img src="https://github.com/user-attachments/assets/5a7dd527-9222-4b29-aca0-3f13cd422531" width="300">
