@@ -10,7 +10,6 @@ export const Field: FC = () => {
     const [result, setResult] = useState<string>('0');
     const [outputNumber, setOutputNumber] = useState<string>("0");
     const [sign, setSign] = useState("");
-    const [justClicked, setJustClicked] = useState<string>("");
     const isFirstRender = useRef(true);
 
 
@@ -33,6 +32,9 @@ export const Field: FC = () => {
             case "/":
                 if (b === 0){
                     setOutputNumber("NaN");
+                    setSign("");
+                    setResult("0");
+                    setIntermediateResult("");
                     return "";
                 }
                 return a / b;
@@ -40,20 +42,9 @@ export const Field: FC = () => {
     }
 
     const handleArithmeticButtonClick = (value: string) => {
-        // if(ARITHMETIC_BUTTONS.indexOf(justClicked) !== -1){
-        //     console.log("Prev click", justClicked);
-        //     setSign(value);
-        // }
-        // console.log("setJustClicked", value);
-        // if (value === justClicked){
-        //     return;
-        // }
-        setJustClicked(value);
-        console.log("Click arithmetic Button. Sign, intermediateResult, result:", value, intermediateResult, result)
 
         if(intermediateResult !== ""){
             const resultNew: string | number = arithmeticAction(sign, result, intermediateResult);
-            //setResult(resultNew.toString());
             setResult(resultNew === "" ? intermediateResult : resultNew.toString());
         }
 
@@ -62,20 +53,11 @@ export const Field: FC = () => {
     }
 
     const handleNumberButtonClick = (value: string) => {
-        setJustClicked(value);
-
         setIntermediateResult(prev => prev + value);
-        console.log("Click number button. value, intermediateResultPrev, result", value, intermediateResult, result);
     }
 
     const handleFunctionButtonClick = (value: string) => {
-        setJustClicked(value);
-
-        console.log("Click function button. Value, intermediateResult, result", value, intermediateResult, result);
-
-        action(value);
-        
-        function action(value:string): void{
+        ((value:string): void => {
             switch (value){
                 case "C":
                     setResult("0"); 
@@ -86,25 +68,13 @@ export const Field: FC = () => {
                     const resultNew: number = arithmeticAction(sign, result, intermediateResult) as number;
                     setResult(resultNew.toString());
                     setIntermediateResult("");
-                    //setOutputNumber(resultNew.toString());
                     setSign("");
-                    //setIntermediateResult('');
-                    return;                    
+                    break;                    
             }            
-        }
+        })(value)
     }
 
     useEffect(()=>{
-        console.log("Change result", result);
-
-        // if(result === "0"){
-        //     setIntermediateResult("");
-        //     setOutputNumber("0");
-        //     console.log("Set setIntermediateResult='', setOutputNumber=0")
-        // } else {
-        //     setOutputNumber(result)
-        // }
-
         if(intermediateResult || result){
             setOutputNumber(result);
         }
@@ -112,7 +82,6 @@ export const Field: FC = () => {
 
 
     useEffect(()=>{
-        console.log("Change intermediateResult", intermediateResult);
         if (isFirstRender.current){
             isFirstRender.current = false;
             return;
@@ -125,14 +94,8 @@ export const Field: FC = () => {
     }, [intermediateResult]);
 
     useEffect(()=>{
-        console.log("Change sign. Sign, intermediateResult, result", sign, intermediateResult, result);
         setIntermediateResult('');
     }, [sign])
-
-    useEffect(()=>{
-        console.log("just clicked", justClicked)
-    }, [justClicked])
-    
 
     return(<>
     <Result result = { outputNumber }/>
