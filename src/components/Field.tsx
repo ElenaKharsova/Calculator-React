@@ -97,7 +97,7 @@ export const Field: FC = () => {
         setIntermediateResult('');
     }, [sign])
 
-    return(<>
+    return(<div className="field">
     <Result result = { outputNumber }/>
     <div className = "buttons-wrap">
         <div className = "arithmetic-buttons-wrap">
@@ -125,5 +125,5 @@ export const Field: FC = () => {
         }
         </div>
     </div>
-    </>)
+    </div>)
 }
