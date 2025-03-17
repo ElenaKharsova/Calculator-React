@@ -6,10 +6,11 @@ import React from "react";
 
 
 export const Field: FC = () => {
-    const [intermediateResult, setIntermediateResult] = useState<string>('');
+    const [intermediateResult, setIntermediateResult] = useState<string>("");
     const [result, setResult] = useState<string>('0');
-    const [outputNumber, setOutputNumber] = useState<string>('0');
-    const [sign, setSign] = useState('');
+    const [outputNumber, setOutputNumber] = useState<string>("0");
+    const [sign, setSign] = useState("");
+    const [justClicked, setJustClicked] = useState<string>("");
     const isFirstRender = useRef(true);
 
 
@@ -30,24 +31,46 @@ export const Field: FC = () => {
             case "*":
                 return a * b;
             case "/":
+                if (b === 0){
+                    setOutputNumber("NaN");
+                    return "";
+                }
                 return a / b;
         } 
     }
 
     const handleArithmeticButtonClick = (value: string) => {
+        // if(ARITHMETIC_BUTTONS.indexOf(justClicked) !== -1){
+        //     console.log("Prev click", justClicked);
+        //     setSign(value);
+        // }
+        // console.log("setJustClicked", value);
+        // if (value === justClicked){
+        //     return;
+        // }
+        setJustClicked(value);
         console.log("Click arithmetic Button. Sign, intermediateResult, result:", value, intermediateResult, result)
-        const resultNew: string | number = arithmeticAction(sign, result, intermediateResult);
 
-        setResult(resultNew === "" ? intermediateResult : resultNew.toString());
+        if(intermediateResult !== ""){
+            const resultNew: string | number = arithmeticAction(sign, result, intermediateResult);
+            //setResult(resultNew.toString());
+            setResult(resultNew === "" ? intermediateResult : resultNew.toString());
+        }
+
+        setIntermediateResult(""); 
         setSign(value); 
     }
 
     const handleNumberButtonClick = (value: string) => {
+        setJustClicked(value);
+
         setIntermediateResult(prev => prev + value);
         console.log("Click number button. value, intermediateResultPrev, result", value, intermediateResult, result);
     }
 
     const handleFunctionButtonClick = (value: string) => {
+        setJustClicked(value);
+
         console.log("Click function button. Value, intermediateResult, result", value, intermediateResult, result);
 
         action(value);
@@ -82,7 +105,7 @@ export const Field: FC = () => {
         //     setOutputNumber(result)
         // }
 
-        if(intermediateResult !== ""){
+        if(intermediateResult || result){
             setOutputNumber(result);
         }
     },[result])
@@ -102,11 +125,13 @@ export const Field: FC = () => {
     }, [intermediateResult]);
 
     useEffect(()=>{
-        console.log("Change sign. Sign, result", sign, result);
+        console.log("Change sign. Sign, intermediateResult, result", sign, intermediateResult, result);
         setIntermediateResult('');
     }, [sign])
 
-    
+    useEffect(()=>{
+        console.log("just clicked", justClicked)
+    }, [justClicked])
     
 
     return(<>
