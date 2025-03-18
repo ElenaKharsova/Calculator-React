@@ -10,7 +10,5 @@ const meta: Meta<typeof Field> = {
 export default meta;
 
 export const Default: StoryObj<typeof Field> = {
-    args: {
-    // Передай аргументы, если компонент их принимает
-    },
+    args: {},
 };

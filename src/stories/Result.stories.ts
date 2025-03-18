@@ -9,7 +9,5 @@ const meta: Meta<typeof Result> = {
 export default meta;
 
 export const Default: StoryObj<typeof Result> = {
-  args: {
-    // Передай аргументы, если компонент их принимает
-  },
+  args: {},
 };
