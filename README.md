@@ -4,4 +4,4 @@
 
 Result of work you can see in https://elenakharsova.github.io/Calculator-React/
 
-<img src="https://github.com/user-attachments/assets/5a7dd527-9222-4b29-aca0-3f13cd422531" width="300">
+<img src="https://github.com/user-attachments/assets/f276d101-844e-4288-833a-84941902095e" width="250">
