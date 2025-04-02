@@ -3,6 +3,7 @@ import { FC, use, useEffect, useRef, useState } from "react";
 import { Result } from './Result'
 import { Button } from './Button';
 import React from "react";
+import { validateHeaderValue } from "node:http";
 
 
 export const Field: FC = () => {
@@ -13,9 +14,12 @@ export const Field: FC = () => {
     const isFirstRender = useRef(true);
 
 
-    const NUMBER_BUTTONS: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-    const FUNCTION_BUTTONS: string[] = ["=", "C"];
-    const ARITHMETIC_BUTTONS: string[] = ["+", "-", "*", "/"];
+    const NUMBER_BUTTONS: string[] = ["7", "8", "9", "4", "5", "6", "1", "2", "3", "0"];
+    const ARITHMETIC_BUTTONS: string[] = ["/", "*", "-", "+"];
+    const CLEAR_BUTTON: string = "AC"
+    const EQUAL_BUTTON: string = "="
+    const DOT_BUTTON: string = ".";
+    const SIGN_BUTTON: string = "±";
 
     function arithmeticAction(sign: string, member1: string, member2: string): number | string{
         const a = Number(member1);
@@ -59,25 +63,27 @@ export const Field: FC = () => {
         setIntermediateResult(prev => prev + value);
     }
 
-    const handleFunctionButtonClick = (value: string) => {
-        ((value:string): void => {
-            switch (value){
-                case "C":
-                    setResult("0"); 
-                    setIntermediateResult("");
-                    setOutputNumber("0");
-                    break;
-                case "=":
-                    const resultNew: number = arithmeticAction(sign, result, intermediateResult) as number;
-                    setResult(resultNew.toString());
-                    if (result === resultNew.toString()) {
-                        setOutputNumber(resultNew.toString());
-                    }
-                    setIntermediateResult("");
-                    setSign("");
-                    break;                    
-            }            
-        })(value)
+    const handleClearButtonClick = () => {
+        setResult("0"); 
+        setIntermediateResult("");
+        setOutputNumber("0");
+    }
+
+    const handleDotButtonClick = () => {
+    }
+
+    const handleSignButtonClick = () => {
+        
+    }
+
+    const handleEqualButtonClick = () => {
+        const resultNew: number = arithmeticAction(sign, result, intermediateResult) as number;
+        setResult(resultNew.toString());
+        if (result === resultNew.toString()) {
+            setOutputNumber(resultNew.toString());
+        }
+        setIntermediateResult("");
+        setSign("");
     }
 
     useEffect(()=>{
@@ -103,33 +109,43 @@ export const Field: FC = () => {
         setIntermediateResult('');
     }, [sign])
 
-    return(<div className="field">
-    <Result result = { outputNumber }/>
-    <div className = "buttons-wrap">
-        <div className = "arithmetic-buttons-wrap">
-        {
-            ARITHMETIC_BUTTONS.map((value: string)=>{
-                return (
-            <Button key = {value} value = {value} handleClick = {() => handleArithmeticButtonClick(value)}/>)
-            })        
-        }
+    return(
+    <div className="field">
+        <Result result = { outputNumber }/>
+        <div className = "buttons-wrap">
+            <div className = "main-block-wrap">
+                <div className="functional-buttons-wrap">
+                    <Button className = "functional-button" key = {CLEAR_BUTTON} value = {CLEAR_BUTTON} handleClick = {() => handleClearButtonClick}/>
+                    <Button className = "functional-button" key = {SIGN_BUTTON} value = {SIGN_BUTTON} handleClick = {() => handleSignButtonClick}/>
+                </div>
+                <div className="number-buttons-wrap">
+                {
+                    NUMBER_BUTTONS.map((value: string, index: number)=>{
+                        if (index !== NUMBER_BUTTONS.length - 1){
+                            return (
+                            <Button className = "number-button" key = {value} value = {value} handleClick = {() => handleNumberButtonClick(value)}/>)
+                        } else {
+                            console.log("value", value)
+                            return (
+                            <Button className = "number-button last-button" key = {value} value = {value} handleClick = {() => handleArithmeticButtonClick(value)}/>)
+                        }  
+                    })
+                }
+                <Button className = "number-button" key = {DOT_BUTTON} value = {DOT_BUTTON} handleClick={() => handleDotButtonClick}/>
+                </div>
+            </div>
+            <div className = "operations-block-wrap">
+                <div className = "arithmetic-buttons-wrap">
+                {
+                    ARITHMETIC_BUTTONS.map((value: string)=>{
+                        return (
+                            <Button className = "arithmetic-button" key = {value} value = {value} handleClick = {() => handleArithmeticButtonClick(value)}/>)
+                        
+                    })        
+                }
+                </div>
+                <Button className = "arithmetic-button" key = {EQUAL_BUTTON} value = {EQUAL_BUTTON} handleClick={() => handleEqualButtonClick}/>
+            </div>
         </div>
-        <div className="number-buttons-wrap">
-        {
-            NUMBER_BUTTONS.map((value: string)=>{
-                return (
-            <Button key = {value} value = {value} handleClick = {() => handleNumberButtonClick(value)}/>)
-            })        
-        }
-        </div>
-        <div className="function-buttons-wrap"> 
-        {
-            FUNCTION_BUTTONS.map((value: string)=>{
-                return (
-            <Button key = {value} value = {value} handleClick = {() => handleFunctionButtonClick(value)}/>)
-            })        
-        }
-        </div>
-    </div>
     </div>)
 }
