@@ -90,6 +90,8 @@ export const Field: FC = () => {
     }, [])
 
     const handleDotButtonClick = useCallback(() => {
+        //ToDo: после второго нажатия на . результат сбрасывается на 0
+        //ToDo: Нажимаем число, затем. результат сбрасывается на 0
         if(intermediateResult.indexOf(".") === -1){
             if(Number(intermediateResult) === 0){
                 setIntermediateResult("0.");
@@ -120,6 +122,7 @@ export const Field: FC = () => {
             sign,
             result,
             intermediateResult,
+            outputNumber,
             secondOperand
         });
         if (!currentSign) {

@@ -7,6 +7,6 @@ type Props = {
 
 export const Result: FC<Props> = ({result}) =>{
     return(
-        <input className = "result-field" type = "text" value = {result} disabled/>
+        <input className = "result-field" data-testid = "result-field" type = "text" value = {result} disabled/>
     )
 }

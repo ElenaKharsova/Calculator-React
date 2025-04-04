@@ -13,6 +13,7 @@ export const Button: FC<Props> = React.memo(({value, handleClick, className}) =>
         <button 
             className = {`calculator-button ${className || ""}`} 
             onClick = {handleClick} 
+            data-testid = {`Button-${value}`}
             tabIndex={0}>
                 {value}
         </button>
