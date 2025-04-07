@@ -24,52 +24,48 @@ export const Field: FC = () => {
     const SIGN_BUTTON: string = "±";
 
     function arithmeticAction(sign: string, member1: string, member2: string): number | string{
-        //ToDo: после выполнения арифметической операции вещественным числом возвращать число, округленное до знаков, содержащихся в этом числе
-        // если число дробное, выводить не более 5 знаков после запятой
         const a = Number(member1);
         const b = Number(member2);
+        let result: number;
+
         switch(sign){
-            case "":
-                return "";
             case "+": 
-                return a + b;
+                result = a + b;
+                break;
             case "-":
-                return a - b;
+                result = a - b;
+                break;
             case "*":
-                return a * b;
+                result = a * b;
+                break;
             case "/":
-                //ToDo: проверить деление на 0
                 if (b === 0){
                     setOutputNumber("NaN");
                     setSign("");
                     setResult("0");
                     setIntermediateResult("");
-                    return "";
+                    return "NaN";
                 }
-                return a / b;
+                result = a / b;
+                break;
+            default:
+                return "";
         } 
+        return Number.isInteger(result) ? result : Number(result.toFixed(5));
     }
 
     const handleArithmeticButtonClick = useCallback((value: string) => {      
-        //ToDo: Проверить результат 0-6 = 6?  
         const currentIntermediaResult = intermediateResultRef.current;
         const currentResult = resultRef.current;
         const currentSign = signRef.current;
 
-        //if(intermediateResult !== ""){
         if(currentIntermediaResult !== ""){
             const resultNew: string | number = 
-                arithmeticAction(//sign, result, intermediateResult);
+                arithmeticAction(
                     currentSign, currentResult, currentIntermediaResult);
             const newResult = resultNew === "" ? currentIntermediaResult : resultNew.toString()
-            //setResult(resultNew === "" ? intermediateResult : resultNew.toString());
-            setResult(newResult);
-            // if (result === resultNew.toString()) {
-            //     setOutputNumber(resultNew.toString());
-            // }
-            //if (result === newResult) {
-                setOutputNumber(newResult);
-            //}
+            setResult(newResult);    
+            setOutputNumber(newResult);
         }
 
         setIntermediateResult(""); 
@@ -78,76 +74,72 @@ export const Field: FC = () => {
 
     const handleArithmeticButtonClickRef = useRef(handleArithmeticButtonClick);
 
-    const handleNumberButtonClick = useCallback((value: string) => {
-        setIntermediateResult(prev => (prev === "0" ? value : prev + value))
+    const handleNumberButtonClick = useCallback((value: string) => {        
+        const newValue = intermediateResultRef.current === "0" ? value : intermediateResultRef.current + value;
+        intermediateResultRef.current = newValue;
+
+        setIntermediateResult(newValue);
+
+        if(newValue !== ""){
+            setOutputNumber(newValue);
+        }              
     },[]);
 
-    const handleClearButtonClick = useCallback(() => {
-        //ToDo: нажимаем любую цифру, потом арифметическую операйию и С => цифра, орифметическая операция => видим 0
+    const handleClearButtonClick = useCallback(() => {     
         setResult("0"); 
         setIntermediateResult("");
         setOutputNumber("0");
+        setSign("");
     }, [])
 
     const handleDotButtonClick = useCallback(() => {
-        //ToDo: после второго нажатия на . результат сбрасывается на 0
-        //ToDo: Нажимаем число, затем. результат сбрасывается на 0
-        if(intermediateResult.indexOf(".") === -1){
-            if(Number(intermediateResult) === 0){
-                setIntermediateResult("0.");
-            } else {
-                setIntermediateResult(intermediateResult + ".");
-            }
+        let newValue;
+
+        if (!intermediateResultRef.current.includes(".")){
+            newValue = intermediateResultRef.current === "" ? "0." : intermediateResultRef.current + ".";
+        } else {
+            newValue = intermediateResultRef.current;
+        }
+
+        intermediateResultRef.current = newValue;
+        setIntermediateResult(newValue);
+
+        if(intermediateResultRef.current !== ""){
+            setOutputNumber(newValue);
         }
     }, [])
 
     const handleSignButtonClick = useCallback(() => {
-        setIntermediateResult((Number(intermediateResult) * (-1)).toString());
-        if (intermediateResult === ""){
-        //ToDo: После знака равно, если нажать смену знака, результат сбрасывается на 0
-        }
+        if (intermediateResultRef.current !== "") {
+            const newValue = (Number(intermediateResultRef.current) * -1).toString();
+            intermediateResultRef.current = newValue;
+            setIntermediateResult(newValue);       
+            setOutputNumber(newValue);
+        } else if (resultRef.current !== "") {
+            const newResult = (Number(resultRef.current) * -1).toString();
+            setResult(newResult);
+            setOutputNumber(newResult);
+        }        
     }, [])
 
     const handleEqualButtonClick = useCallback(() => {
-        //const secondOperand = intermediateResult || result;
-        const secondOperand = intermediateResultRef.current || resultRef.current;
+        const secondOperand = intermediateResultRef.current !== "" 
+            ? intermediateResultRef.current 
+            : resultRef.current;
         const currentSign = signRef.current;
 
         if (!secondOperand) {
-            console.log("handleEqualButtonClick: No intermediate result, returning early.", intermediateResult);
             return;
         }
-    
-        console.log("handleEqualButtonClick: Performing calculation with:", {
-            sign,
-            result,
-            intermediateResult,
-            outputNumber,
-            secondOperand
-        });
+
         if (!currentSign) {
-            console.warn("handleEqualButtonClick: No sign set, returning early.");
             return;
         }
-
-        // setResult(prevResult => {
-        //     const resultNew: string = arithmeticAction(sign, prevResult, secondOperand)?.toString();
-        //     console.log("New result calculated:", resultNew);
-
-        //     setOutputNumber(resultNew);
-        //     return resultNew;
-        // })
 
         const resultNew: string = arithmeticAction(currentSign, resultRef.current, secondOperand)?.toString();
 
-        // const resultNew: number = arithmeticAction(sign, result, intermediateResult) as number;
-        // setResult(resultNew.toString());
-        // if (result === resultNew.toString()) {
-        //     setOutputNumber(resultNew.toString());
-        // }
         setResult(resultNew);
         setOutputNumber(resultNew);
-
         setIntermediateResult("");
         setSign("");
     }, []);
@@ -159,31 +151,14 @@ export const Field: FC = () => {
         handleEqualButtonClickRef.current = handleEqualButtonClick;
     },[handleArithmeticButtonClick, handleEqualButtonClick])
 
-
-    useEffect(()=>{
-        if(intermediateResult || result){
-            setOutputNumber(result);
-        }
-    },[result])
-
-
     useEffect(()=>{
         if (isFirstRender.current){
             isFirstRender.current = false;
             return;
         }
-        
-        if(intermediateResult !== ""){
-            setOutputNumber(intermediateResult);
-        }
-        
+
+        intermediateResultRef.current = intermediateResult;
     }, [intermediateResult]);
-
-    // useEffect(()=>{
-    //     setIntermediateResult('');
-    //     console.log("Updated sign:", sign);
-
-    // }, [sign])
 
     useEffect(()=>{
         signRef.current = sign;
@@ -194,23 +169,15 @@ export const Field: FC = () => {
     },[result])
 
     useEffect(()=>{
-        intermediateResultRef.current = intermediateResult;
-    },[intermediateResult])
-
-    useEffect(()=>{
         const handleKeyDown = (event: KeyboardEvent) => {
-            console.log("Key pressed:", event.key);
-
             switch(event.key){
                 case "Enter":
-                    //handleEqualButtonClick();
                     handleEqualButtonClickRef.current();
                     break;
                 case "+":
                 case "-":
                 case "*":
                 case "/":
-                    //handleArithmeticButtonClick(event.key);
                     handleArithmeticButtonClickRef.current(event.key);
                     break;
                 case ".":
@@ -234,15 +201,6 @@ export const Field: FC = () => {
         }
     }, [handleDotButtonClick, handleClearButtonClick, handleNumberButtonClick]);
 
-    useEffect(() => {
-        // Позволяет проверить состояние из консоли
-        (window as any).__debugState = () => ({
-            intermediateResult,
-            result,
-            sign
-        });
-    }, [intermediateResult, result, sign]);
-
     return(
     <div className="field">
         <Result result = { outputNumber }/>
@@ -263,7 +221,6 @@ export const Field: FC = () => {
                 <div className="number-buttons-wrap">
                 {
                     NUMBER_BUTTONS.map((value: string, index: number)=>{
-                        //console.log("value", value);
                         if (index !== NUMBER_BUTTONS.length - 1){
                             return (
                             <Button 
@@ -272,7 +229,6 @@ export const Field: FC = () => {
                                 value = {value} 
                                 handleClick = {() => handleNumberButtonClick(value)}/>)
                         } else {
-                            //console.log("value", value)
                             return (
                             <Button 
                                 className = "number-button last-button" 
