@@ -1,11 +1,24 @@
 :root{
     --button-size-width: 55px;
     --button-size-height: 55px;
+    --gap: 5px;
+
     --main-color: #2D2C2C;
     --secondary-color:#403E3B;
     --additional-color: #EF871F;
     --font-color: #E1DFDC;
-    --gap: 5px;
+
+    --hueMainColor: 0;
+    --satMainColor: 1%;
+    --lightMainColor: 17%;
+
+    --hueSecondaryColor: 36;
+    --satSecondaryColor: 4%;
+    --lightSecondaryColor: 24%;
+
+    --hueAdditionalColor: 30;
+    --satAdditionalColor: 86%;
+    --lightAdditionalColor: 53%;
 }
 
 button{
@@ -104,6 +117,18 @@ button{
     width: 100%;
     border: black 2px solid;
     border-radius: 6px;
+    cursor: pointer;
+    box-shadow:
+        inset 0 -2px 0 rgba(0, 0, 0, 0.4), 
+        0 2px 4px rgba(0, 0, 0, 0.5);     
+    transition: all 0.1s ease-in-out;
+}
+
+.calculator-button:active {
+    box-shadow:
+        inset 0 2px 0 rgba(0, 0, 0, 0.4), 
+        0 1px 2px rgba(0, 0, 0, 0.2);     
+    transform: translateY(1px);        
 }
 
 .calculator-button:hover {
@@ -117,11 +142,17 @@ button{
 }
 
 .functional-button {
-    background-color: var(--main-color);
+    background: linear-gradient(to bottom,
+        hsl(var(--hueMainColor), var(--satMainColor), calc(var(--lightMainColor) + 5%)),
+        hsl(var(--hueMainColor), var(--satMainColor), var(--lightMainColor))
+        );
 }
 
 .number-button {
-    background-color: var(--secondary-color);
+    background: linear-gradient(to bottom,
+        hsl(var(--hueSecondaryColor), var(--satSecondaryColor), calc(var(--lightSecondaryColor) + 5%)),
+        hsl(var(--hueSecondaryColor), var(--satSecondaryColor), var(--lightSecondaryColor))
+        );
 }
 
 .arithmetic-button {
