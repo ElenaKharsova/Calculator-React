@@ -1,11 +1,11 @@
 :root{
     --button-size-width: 55px;
     --button-size-height: 55px;
-    --main-color: #5E5b5A;
-    --secondary-color:#848482;
-    --additional-color: #f2A33E;
-    --font-color: #FEFCFD;
-    --border-shadow: solid 2px black;
+    --main-color: #2D2C2C;
+    --secondary-color:#403E3B;
+    --additional-color: #EF871F;
+    --font-color: #E1DFDC;
+    --gap: 5px;
 }
 
 button{
@@ -26,9 +26,14 @@ button{
 }
 
 .field {
-    outline: var(--border-shadow);
-    background-color: var(--main-color);
+    display: flex;
+    gap: var(--gap);
+    flex-direction: column;
+    padding: 10px;
+    background-color: #212120;
     width: calc(4 * var(--button-size-width));
+    border: var(--main-color) 2px solid;
+    border-radius: 15px;
 }
 
 .result-field {
@@ -38,25 +43,32 @@ button{
     font-size: 2rem;
     background-color: var(--main-color);
     color: var(--font-color);
-    outline: var(--border-shadow);
+    border: black 2px solid;
+    border-radius: 6px;
 }
 
 .buttons-wrap {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    gap: var(--gap);
     align-items: center;
     width: 100%;
 }
 
 .main-block-wrap{
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
     width: 75%;
 }
 
 .number-buttons-wrap {
     display: grid;
+    gap: var(--gap);
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
+    width: 100%;
     align-items: stretch;
     justify-items: stretch;
 }
@@ -68,20 +80,30 @@ button{
     width: 100%;
 }
 
+.operations-block-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    width: var(--button-size-width);
+    gap: var(--gap);
+}
+
 .arithmetic-buttons-wrap{
     display: flex;
     flex-wrap: wrap;
+    gap: var(--gap);
     justify-content: flex-start;
 }
 
 .calculator-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 0;
     font-size: 1.8em;
     height: var(--button-size-height);
     width: 100%;
-    outline: var(--border-shadow);
-    box-shadow: none;
-    outline-offset: -1px
+    border: black 2px solid;
+    border-radius: 6px;
 }
 
 .calculator-button:hover {
@@ -91,6 +113,7 @@ button{
 .functional-buttons-wrap{
     display: flex;
     width: 100%;
+    gap: var(--gap);
 }
 
 .functional-button {
