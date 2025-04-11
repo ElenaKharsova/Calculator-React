@@ -11,4 +11,4 @@ Storybooks have almost been added.
 
 The result of work you can see in https://elenakharsova.github.io/Calculator-React/
 
-<img src="https://github.com/user-attachments/assets/aee6a5b4-e9eb-4942-9c35-086ab324438a" width="250">
+<img src="https://github.com/user-attachments/assets/4c7821b5-02a0-4187-ba8f-1db9cdba8976" width="250">
